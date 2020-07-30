@@ -1,7 +1,5 @@
-import dotenv from "dotenv";
-import path from "path";
-dotenv.config({ path: path.resolve(__dirname, ".env") });
 import { adjectives, nouns } from "./words";
+import jwt from "jsonwebtoken";
 
 const mailgun = require("mailgun-js")({
   apiKey: process.env.MAILGUN_APIKEY,
@@ -25,8 +23,10 @@ export const sendSecretMail = (adress, secret) => {
     from: "4leaf@prismagram.com",
     to: adress,
     subject: "🔐 Login Secret For Prismagram",
-    html: `Hello! Your Login Secret It ${secret}.<br /> Copy Paste On The App/Website To login`,
+    html: `Hello! Your Login Secret Its <strong>${secret}</strong>.<br /> Copy Paste On The App/Website To login`,
   };
 
   return sendMail(email);
 };
+
+export const generateToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET);
